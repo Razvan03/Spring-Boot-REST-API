@@ -18,27 +18,27 @@
 
 ## Development Steps
 
-[1.Spring Boot Application Three-Layer Architecture](#Spring-Boot-Application-Three-Layer-Architecture)
+[1. Spring Boot Application Three-Layer Architecture](#Spring-Boot-Application-Three-Layer-Architecture)
 
-2.Create and Setup Spring Boot Project in Intellij IDEA
+2. Create and Setup Spring Boot Project in Intellij IDEA
 
-3.Configure MySQL Database in Spring Boot Application
+3. Configure MySQL Database in Spring Boot Application
 
-4.Create Employee JPA Entity
+4. Create Employee JPA Entity
 
-5.Create EmployeeRepository
+5. Create EmployeeRepository
 
-6.Create EmployeeDto and EmployeeMapper
+6. Create EmployeeDto and EmployeeMapper
 
-7.Build Add Employee REST API
+7. Build Add Employee REST API
 
-8.Build Get Employee REST API
+8. Build Get Employee REST API
 
-9.Build Get All Employees REST API
+9. Build Get All Employees REST API
 
-10.Build Update Employeee REST API
+10. Build Update Employeee REST API
 
-11.Build Delete Employee REST API
+11. Build Delete Employee REST API
 
 ## Spring Boot Application Three-Layer Architecture
 
@@ -48,35 +48,35 @@ This architecture delineates the structure of a Spring Boot application into thr
 
 ### Layers Explanation:
 
-#### 1.Presentation Layer(Controller Layer):
+#### 1. Presentation Layer(Controller Layer):
 
--Purpose: To receive and respond to external requests, typically HTTP requests, acting as the initial entry point for the application.
+##### Purpose: To receive and respond to external requests, typically HTTP requests, acting as the initial entry point for the application.
 
--Contents:
+##### Contents:
 
-+Controllers: They handle incoming requests, validate input, and return appropriate responses, often in the form of JSON or XML.
+-Controllers: They handle incoming requests, validate input, and return appropriate responses, often in the form of JSON or XML.
 
-+DTOs (Data Transfer Objects): These are simple objects that carry data between processes. In this context, DTOs are used to transfer data between the Presentation layer and the Service layer, abstracting the internal domain model.
+-DTOs (Data Transfer Objects): These are simple objects that carry data between processes. In this context, DTOs are used to transfer data between the Presentation layer and the Service layer, abstracting the internal domain model.
 
-#### 2.Service Layer:
+#### 2. Service Layer:
 
--Purpose: To encapsulate the business logic of the application. This layer communicates between the Presentation and DAO layers, ensuring that data is processed, validated, or transformed as needed.
+##### Purpose: To encapsulate the business logic of the application. This layer communicates between the Presentation and DAO layers, ensuring that data is processed, validated, or transformed as needed.
 
--Contents:
+##### Contents:
 
-+Services: They contain core business logic and rules of the application. Any operation that needs to be executed, like calculations, validations, or in my case , CRUD Operations Usage implementations, happens here.
+-Services: They contain core business logic and rules of the application. Any operation that needs to be executed, like calculations, validations, or in my case , CRUD Operations Usage implementations, happens here.
 
-+DTOs: While also present in the Presentation layer, DTOs are used in the Service layer to pass data to and from the DAO layer, ensuring that there's a clear boundary and separation of concerns.
+-DTOs: While also present in the Presentation layer, DTOs are used in the Service layer to pass data to and from the DAO layer, ensuring that there's a clear boundary and separation of concerns.
 
-#### 3.DAO Layer(Repository Layer):
+#### 3. DAO Layer(Repository Layer):
 
-Purpose: Direct interaction with the database. This layer is responsible for creating, reading, updating, and deleting records in the database.
+##### Purpose: Direct interaction with the database. This layer is responsible for creating, reading, updating, and deleting records in the database.
 
--Contents:
+##### Contents:
 
-+Repositories (DAOs): These are interfaces or abstract classes, typically using frameworks like JPA (Java Persistence API). They provide methods to perform CRUD operations and interact directly with the database.
+-Repositories (DAOs): These are interfaces or abstract classes, typically using frameworks like JPA (Java Persistence API). They provide methods to perform CRUD operations and interact directly with the database.
 
-+Entities: Represented as classes, these are the domain models mapped directly to the database tables. They can have annotations to describe relationships, table names, and other database-related configurations.
+-Entities: Represented as classes, these are the domain models mapped directly to the database tables. They can have annotations to describe relationships, table names, and other database-related configurations.
 
 ### Flow:
 
