@@ -18,7 +18,7 @@
 
 ## Development Steps
 
-[1.Spring Boot Application Three-Layer Architecture](#Spring Boot Application Three-Layer Architecture)
+[1.Spring/Boot/Application/Three-Layer/Architecture](#Spring Boot Application Three-Layer Architecture)
 
 2.Create and Setup Spring Boot Project in Intellij IDEA
 
