@@ -44,6 +44,8 @@
 
 [13.How to use Postman in order to test the API](#How-to-use-Postman)
 
+[14.Directory Tree](#Directory-Tree)
+
 ## Spring Boot Application Three-Layer Architecture
 
 ![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/ThreeLayers.png)
@@ -530,6 +532,8 @@ If the employee exists, the method proceeds to delete the employee from the data
 
 ## How-to-use-Postman:
 
+![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/Postman.png)
+
 ### For createEmployee method:
 
 In order to test our API, you need to create a new POST request through Postman , write the URL which the controller method is responding for (http://localhost:8080/api/employees), select "body" , then "raw" , then JSON and write the following JSON:
@@ -563,3 +567,104 @@ You should get the JSON back with the attributes updated.
 Create a DELETE request with the localhost URL followed by /id of whom you want to delete.
 You should get back the message : "Employee deleted successfully!".
 
+## Directory Tree
+
+ems-backend
+    │   .gitignore
+    │   HELP.md
+    │   mvnw
+    │   mvnw.cmd
+    │   pom.xml
+    │
+    ├───.idea
+    │       .gitignore
+    │       compiler.xml
+    │       encodings.xml
+    │       jarRepositories.xml
+    │       misc.xml
+    │       workspace.xml
+    │
+    ├───.mvn
+    │   └───wrapper
+    │           maven-wrapper.jar
+    │           maven-wrapper.properties
+    │
+    ├───src
+    │   ├───main
+    │   │   ├───java
+    │   │   │   └───net
+    │   │   │       └───javaproject
+    │   │   │           └───ems
+    │   │   │               │   EmsBackendApplication.java
+    │   │   │               │
+    │   │   │               ├───controller
+    │   │   │               │       EmployeeController.java
+    │   │   │               │
+    │   │   │               ├───dto
+    │   │   │               │       EmployeeDto.java
+    │   │   │               │
+    │   │   │               ├───entity
+    │   │   │               │       Employee.java
+    │   │   │               │
+    │   │   │               ├───exception
+    │   │   │               │       ResourceNotFoundException.java
+    │   │   │               │
+    │   │   │               ├───mapper
+    │   │   │               │       EmployeeMapper.java
+    │   │   │               │
+    │   │   │               ├───repository
+    │   │   │               │       EmployeeRepository.java
+    │   │   │               │
+    │   │   │               └───service
+    │   │   │                   │   EmployeeService.java
+    │   │   │                   │
+    │   │   │                   └───impl
+    │   │   │                           EmployeeServiceImpl.java
+    │   │   │
+    │   │   └───resources
+    │   │       │   application.properties
+    │   │       │
+    │   │       ├───static
+    │   │       └───templates
+    │   └───test
+    │       └───java
+    │           └───net
+    │               └───javaproject
+    │                   └───ems
+    │                           EmsBackendApplicationTests.java
+    │
+    └───target
+        ├───classes
+        │   │   application.properties
+        │   │
+        │   └───net
+        │       └───javaproject
+        │           └───ems
+        │               │   EmsBackendApplication.class
+        │               │
+        │               ├───controller
+        │               │       EmployeeController.class
+        │               │
+        │               ├───dto
+        │               │       EmployeeDto.class
+        │               │
+        │               ├───entity
+        │               │       Employee.class
+        │               │
+        │               ├───exception
+        │               │       ResourceNotFoundException.class
+        │               │
+        │               ├───mapper
+        │               │       EmployeeMapper.class
+        │               │
+        │               ├───repository
+        │               │       EmployeeRepository.class
+        │               │
+        │               └───service
+        │                   │   EmployeeService.class
+        │                   │
+        │                   └───impl
+        │                           EmployeeServiceImpl.class
+        │
+        └───generated-sources
+            └───annotations
