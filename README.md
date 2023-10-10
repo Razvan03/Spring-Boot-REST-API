@@ -24,9 +24,9 @@
 
 [3. Configure MySQL Database in Spring Boot Application](#Configure-MySQL-Database-in-Spring-Boot-Application)
 
-4. Create Employee JPA Entity
+[4. Create Employee JPA Entity](#Create-Employee-JPA-Entity)
 
-5. Create EmployeeRepository
+[5. Create EmployeeRepository](#Create-EmployeeRepository)
 
 6. Create EmployeeDto and EmployeeMapper
 
@@ -93,7 +93,7 @@ After this, click on generate and open the downloaded folder in Intellij IDEA.
 
 ## Configure MySQL Database in Spring Boot Application
 
-In Intellij IDEA project explorer, navigate to projectName/src/main/resources and open application.properties.
+In Intellij IDEA project explorer, navigate to ems-backend/src/main/resources and open application.properties.
 
 Write this:
 
@@ -117,3 +117,62 @@ Hibernate needs to know the SQL dialect to generate appropriate SQL queries for 
 #### spring.jpa.hibernate.ddl-auto=update
 
 This is a Hibernate feature which automatically validates or exports database schema changes depending on the value provided. In this case, "update" means Hibernate will update the database schema if necessary (e.g., new entities or changes in existing entities).
+
+## Create Employee JPA Entity
+
+In ems-backend/src/main/java/net.javaproject.ems create a new package named entity and a class named Employee with the following code:
+
+```java
+package net.javaproject.ems.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "employees")
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //auto incremate the primary key
+    private Long id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email_id", nullable = false, unique = true)
+    private String email;
+}
+```
+
+The Employee class represents an entity mapped to the "employees" table in the database. It defines attributes like ID, first name, last name, and email. This class is used to interact with employee data in the database using JPA, and Lombok annotations auto-generate its boilerplate code like getters and setters.
+
+## Create EmployeeRepository
+
+In ems-backend/src/main/java/net.javaproject.ems create a new package named repository and an interface named EmployeeRepository that extends JpaRepository.
+
+```java
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+}
+```
+
+The EmployeeRepository interface extends JpaRepository, targeting the Employee entity with a primary key of type Long. It provides CRUD operations for the Employee entity without requiring explicit method definitions. In a Spring-based application, it facilitates data access to the "employees" table in the database.
+
+
+
+
+
+
+
+
+
+
+
