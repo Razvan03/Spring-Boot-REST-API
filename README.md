@@ -22,7 +22,7 @@
 
 [2. Create and Setup Spring Boot Project in Intellij IDEA](#Setup-Spring-Boot-Project-in-Intellij-IDEA)
 
-3. Configure MySQL Database in Spring Boot Application
+[3. Configure MySQL Database in Spring Boot Application](#Configure-MySQL-Database-in-Spring-Boot-Application)
 
 4. Create Employee JPA Entity
 
@@ -90,3 +90,30 @@ Navigate to [Spring Initializr](https://start.spring.io/) and fill the propertie
 ![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/Spring.png)
 
 After this, click on generate and open the downloaded folder in Intellij IDEA.
+
+## Configure MySQL Database in Spring Boot Application
+
+In Intellij IDEA project explorer, navigate to projectName/src/main/resources and open application.properties.
+
+Write this:
+
+```text
+spring.datasource.url=jdbc:mysql://localhost:3306/ems
+spring.datasource.username=root
+spring.datasource.password=password
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.hibernate.ddl-auto=update
+```
+
+#### spring.datasource.url=jdbc:mysql://localhost:3306/ems
+
+This sets the URL for your MySQL database. It indicates that the database is running on your local machine (localhost) at port 3306 and the name of the database is ems.
+
+#### spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+Hibernate needs to know the SQL dialect to generate appropriate SQL queries for the underlying database. This setting tells Hibernate to use the MySQL dialect, so it can produce MySQL-compatible queries.
+
+#### spring.jpa.hibernate.ddl-auto=update
+
+This is a Hibernate feature which automatically validates or exports database schema changes depending on the value provided. In this case, "update" means Hibernate will update the database schema if necessary (e.g., new entities or changes in existing entities).
