@@ -42,7 +42,7 @@
 
 ## Spring Boot Application Three-Layer Architecture
 
-
+![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/ThreeLayers.jpg)
 
 This architecture delineates the structure of a Spring Boot application into three primary layers: Presentation, Service, and DAO. External requests from tools like Postman interact with the Presentation layer, which further communicates with the Service layer, eventually reaching the DAO layer for database operations. The layers exchange data using Data Transfer Objects (DTOs) to ensure a clean separation of concerns.
 
