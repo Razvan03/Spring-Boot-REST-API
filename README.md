@@ -36,11 +36,13 @@
 
 [9. Build Get Employee REST API](#Build-Get-Employee-REST-API)
 
-10. Build Get All Employees REST API
+[10. Build Get All Employees REST API](#Build-Get-All-Employees-REST-API)
 
-11. Build Update Employeee REST API
+[11. Build Update Employeee REST API](#Build-Update-Employeee-REST-API)
 
-12. Build Delete Employee REST API
+[12. Build Delete Employee REST API](#Build-Delete-Employee-REST-API)
+
+[13.How to use Postman in order to test the API](#How-to-use-Postman)
 
 ## Spring Boot Application Three-Layer Architecture
 
@@ -246,10 +248,10 @@ In essence, in a REST API setup, the controller manages the HTTP interactions an
 
 ## Build Add Employee REST API
 
-In EmployeeService write the add method:
+### In EmployeeService write the add method:
 ```EmployeeDto createEmployee(EmployeeDto employeeDto); ```
 
-EmployeeServiceImpl:
+### EmployeeServiceImpl:
 ```java
 import net.javaproject.ems.mapper.EmployeeMapper;
 import net.javaproject.ems.repository.EmployeeRepository;
@@ -275,7 +277,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 The createEmployee method in EmployeeServiceImpl takes an EmployeeDto as input, converts it to an Employee entity using the EmployeeMapper, saves the entity to the database through the employeeRepository, and then converts the saved entity back to an EmployeeDto using the mapper, returning the DTO representation of the persisted employee.
 
-EmployeeController:
+### EmployeeController:
 
 ```java
 @RestController //capable to handle HTTP requests
@@ -306,5 +308,258 @@ When a client sends a POST request with a JSON payload to this endpoint:
 
 ## Build Get Employee REST API
 
-In EmployeeService write the getEmployeeById method:
+### In EmployeeService write the getEmployeeById method:
 ```EmployeeDto getEmployeeById(Long employeeId);```
+
+### EmployeeServiceImpl:
+```java
+ @Override
+    public EmployeeDto getEmployeeById(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Employee does not exist with given id : " + employeeId));
+        return EmployeeMapper.mapToEmployeeDto(employee);
+    }
+```
+
+The getEmployeeById method retrieves an employee based on a given employeeId.
+
+Here's how it works:
+
+1. The method calls the employeeRepository.findById(employeeId), which attempts to fetch an Employee object with the specified employeeId from the database.
+
+2. If the Employee object is found, it gets returned. If not, the orElseThrow method is invoked, which throws a custom exception: ResourceNotFoundException indicating that there's no employee with the provided employeeId.
+
+3. If an Employee object is successfully retrieved, the EmployeeMapper.mapToEmployeeDto method is called to convert the Employee entity into an EmployeeDto Data Transfer Object.
+
+4. Finally, the method returns the EmployeeDto object.
+
+### For the exception create a new package named exception and a class ResourceNotFoundException with the following code:
+
+```java
+package net.javaproject.ems.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends RuntimeException{
+    public ResourceNotFoundException(String message){
+        super(message);
+    }
+}
+```
+
+### EmployeeController:
+```java
+//Build Get Employee REST API
+    @GetMapping("{id}")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") Long employeeId){ //se va pasa parametrul id ca si un PathVariable
+        EmployeeDto employeeDto = employeeService.getEmployeeById(employeeId);
+        return ResponseEntity.ok(employeeDto);
+    }
+```
+
+The getEmployeeById method in the controller handles HTTP GET requests to fetch an employee based on a given ID.
+
+Here's how it works:
+
+Annotations:
+
+@GetMapping("{id}"): This specifies that the method should be invoked for HTTP GET requests where the URL has an additional segment (the {id}), e.g., /api/employees/1.
+
+Method Parameters:
+
+@PathVariable("id") Long employeeId: This annotation binds the {id} segment from the URL to the employeeId method parameter. For instance, if the request URL is /api/employees/5, employeeId would be 5.
+
+Processing:
+
+Inside the method, the employeeService.getEmployeeById(employeeId) call is made to fetch the employee details corresponding to the given employeeId.
+
+Response:
+
+If the EmployeeDto object is successfully retrieved, the method wraps it in a ResponseEntity with an HTTP status of OK (HTTP 200) and returns it. If not, the appropriate exception handling would determine the error response.
+
+## Build Get All Employees REST API
+
+### In EmployeeService write the getAllEmployees method:
+``` List<EmployeeDto> getAllEmployees(); ```
+
+### EmployeeServiceImpl:
+```java
+@Override
+    public List<EmployeeDto> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        //converteste lista de entity in dto
+        return employees.stream().map((employee) -> EmployeeMapper.mapToEmployeeDto(employee))
+                .collect(Collectors.toList()); //acumulates the elements of the stream into a new list
+    }
+```
+
+The getAllEmployees method retrieves a list of all employees and converts them from entities to DTOs (Data Transfer Objects).
+
+Here's how it works:
+
+1. Fetching All Employees:
+
+employeeRepository.findAll(): This method call fetches all Employee entities from the database and stores them in the employees list.
+
+2. Conversion to DTOs:
+
+The method then utilizes Java streams to process this list.
+
+employees.stream(): This initiates a stream of Employee entities.
+
+.map((employee) -> EmployeeMapper.mapToEmployeeDto(employee)): For each Employee entity in the stream, the lambda function provided to the map method converts it into an EmployeeDto object using the EmployeeMapper.
+
+.collect(Collectors.toList()): This terminal operation accumulates the processed stream elements (now EmployeeDto objects) into a new list.
+
+3. Return:
+
+The method finally returns the list of EmployeeDto objects.
+
+###EmployeeController:
+
+```java
+//Build Get All Employees REST API
+    @GetMapping
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
+        List<EmployeeDto> employees = employeeService.getAllEmployees();
+        return ResponseEntity.ok(employees);
+    }
+```
+
+## Build Update Employeee REST API
+
+### In EmployeeService write the updateEmployee method:
+``` EmployeeDto updateEmployee(Long employeeId, EmployeeDto updatedEmployee); ```
+
+### EmployeeServiceImpl:
+```java
+@Override
+    public EmployeeDto updateEmployee(Long employeeId, EmployeeDto updatedEmployee) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee does not exists with given id: " + employeeId)
+        );
+
+        employee.setFirstName(updatedEmployee.getFirstName());
+        employee.setLastName(updatedEmployee.getLastName());
+        employee.setEmail(updatedEmployee.getEmail());
+
+        Employee updatedEmployeeObj = employeeRepository.save(employee);
+
+        return EmployeeMapper.mapToEmployeeDto(updatedEmployeeObj);
+    }
+```
+
+This updateEmployee method is designed to update an existing employee's details.
+
+Here's how it operates:
+
+1. Find Existing Employee:
+
+-The method first tries to fetch an existing Employee entity with the provided employeeId from the database using employeeRepository.findById(employeeId).
+
+-If the employee is not found, a ResourceNotFoundException is thrown indicating the absence of the employee with the given ID.
+
+2. Update Employee Details:
+
+-The existing Employee entity's attributes (firstName, lastName, and email) are then updated using values from the updatedEmployee DTO.
+
+3.Persist Changes:
+
+-The modified Employee entity is saved back to the database with employeeRepository.save(employee), and the updated entity is captured in the updatedEmployeeObj.
+
+4.Convert and Return:
+
+Finally, the updated Employee entity is converted back into an EmployeeDto using the EmployeeMapper and returned.
+
+###EmployeeController:
+
+```java
+//Build Update Employee REST API
+    @PutMapping("{id}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") Long employeeId,
+                                                      @RequestBody EmployeeDto updatedEmployee){
+        EmployeeDto employeeDto = employeeService.updateEmployee(employeeId,updatedEmployee);
+        return ResponseEntity.ok(employeeDto);
+    }
+```
+
+## Build Delete Employee REST API
+
+### In EmployeeService write the deleteEmployee method:
+```void deleteEmployee(Long employeeId);```
+
+### EmployeeServiceImpl:
+```java
+@Override
+    public void deleteEmployee(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee does not exists with given id: " + employeeId)
+        );
+        employeeRepository.deleteById(employeeId);
+    }
+```
+
+The deleteEmployee method is designed to delete an employee based on a given employeeId.
+
+Here's a brief rundown:
+
+1. Retrieve the Employee:
+   
+The method attempts to find an Employee entity with the provided employeeId from the database using employeeRepository.findById(employeeId).
+
+2.Exception Handling:
+
+If the specified employee isn't found, the orElseThrow method triggers, throwing a ResourceNotFoundException with a message indicating that no employee exists with the given ID.
+
+3.Delete the Employee:
+If the employee exists, the method proceeds to delete the employee from the database using employeeRepository.deleteById(employeeId).
+
+### EmployeeController:
+```java
+@DeleteMapping("{id}")
+    //Build Delete Employee REST API
+    public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long employeeId){
+        employeeService.deleteEmployee(employeeId);
+        return ResponseEntity.ok("Employee deleted successfully!");
+    }
+}
+```
+
+## How-to-use-Postman:
+
+### For createEmployee method:
+
+In order to test our API, you need to create a new POST request through Postman , write the URL which the controller method is responding for (http://localhost:8080/api/employees), select "body" , then "raw" , then JSON and write the following JSON:
+{
+    "firstName": "name",
+    "lastName": "lastName",
+    "email":"email@gmail.com"
+}
+You should get the JSON back as a response if the method is correct.
+
+### For getEmployeeById method:
+Create an GET request and write the localhost URL followed by /id like this: http://localhost:8080/api/employees/1
+You should get back the JSON whose ID is the one mentioned above.
+
+### For getAllEmployees method:
+Just create a GET request with the localhost URL: http://localhost:8080/api/employees
+You should get a different JSON for every employee in the database.
+
+### For updateEmployee method:
+Create a PUT request with the URL followed by the /id of whom you want to update: http://localhost:8080/api/employees/1, select "body" , then "raw" , then JSON and write the following JSON:
+following JSON:
+{
+    "firstName": "name",
+    "lastName": "lastName",
+    "email":"email@gmail.com"
+}
+You should get the JSON back with the attributes updated.
+
+### For deleteEmployee method:
+
+Create a DELETE request with the localhost URL followed by /id of whom you want to delete.
+You should get back the message : "Employee deleted successfully!".
+
