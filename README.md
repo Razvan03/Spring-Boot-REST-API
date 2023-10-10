@@ -536,7 +536,7 @@ If the employee exists, the method proceeds to delete the employee from the data
 
 ### For createEmployee method:
 
-In order to test our API, you need to create a new POST request through Postman , write the URL which the controller method is responding for (http://localhost:8080/api/employees), select "body" , then "raw" , then JSON and write the following JSON:
+In order to test our API, you need to create a new POST request through Postman , write the URL to which the controller method responds (http://localhost:8080/api/employees), select "body" , then "raw" , then JSON and write the following JSON:
 {
     "firstName": "name",
     "lastName": "lastName",
