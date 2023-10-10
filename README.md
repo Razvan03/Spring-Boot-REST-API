@@ -85,7 +85,7 @@ A user, via Postman, sends a request that first hits the Controller in the Prese
 
 ## Setup Spring Boot Project in Intellij IDEA
 
-Navigate to [https://start.spring.io/] and the properties as in the image below:
+Navigate to [Spring Initializr](https://start.spring.io/) and fill the properties as in the image below:
 
 ![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/Spring.png)
 
