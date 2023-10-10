@@ -328,7 +328,7 @@ The getEmployeeById method retrieves an employee based on a given employeeId.
 
 Here's how it works:
 
-1. The method calls the employeeRepository.findById(employeeId), which attempts to fetch an Employee object with the specified employeeId from the database.
+1. The method calls the ```employeeRepository.findById(employeeId)```, which attempts to fetch an Employee object with the specified employeeId from the database.
 
 2. If the Employee object is found, it gets returned. If not, the orElseThrow method is invoked, which throws a custom exception: ResourceNotFoundException indicating that there's no employee with the provided employeeId.
 
@@ -366,19 +366,19 @@ The getEmployeeById method in the controller handles HTTP GET requests to fetch 
 
 Here's how it works:
 
-Annotations:
+1. Annotations:
 
-@GetMapping("{id}"): This specifies that the method should be invoked for HTTP GET requests where the URL has an additional segment (the {id}), e.g., /api/employees/1.
+```@GetMapping("{id}")```: This specifies that the method should be invoked for HTTP GET requests where the URL has an additional segment (the {id}), e.g., /api/employees/1.
 
-Method Parameters:
+2. Method Parameters:
 
-@PathVariable("id") Long employeeId: This annotation binds the {id} segment from the URL to the employeeId method parameter. For instance, if the request URL is /api/employees/5, employeeId would be 5.
+```@PathVariable("id") Long employeeId```: This annotation binds the {id} segment from the URL to the employeeId method parameter. For instance, if the request URL is /api/employees/5, employeeId would be 5.
 
-Processing:
+3. Processing:
 
-Inside the method, the employeeService.getEmployeeById(employeeId) call is made to fetch the employee details corresponding to the given employeeId.
+Inside the method, the ```employeeService.getEmployeeById(employeeId)``` call is made to fetch the employee details corresponding to the given employeeId.
 
-Response:
+4. Response:
 
 If the EmployeeDto object is successfully retrieved, the method wraps it in a ResponseEntity with an HTTP status of OK (HTTP 200) and returns it. If not, the appropriate exception handling would determine the error response.
 
@@ -404,17 +404,17 @@ Here's how it works:
 
 1. Fetching All Employees:
 
-employeeRepository.findAll(): This method call fetches all Employee entities from the database and stores them in the employees list.
+```employeeRepository.findAll()```: This method call fetches all Employee entities from the database and stores them in the employees list.
 
 2. Conversion to DTOs:
 
 The method then utilizes Java streams to process this list.
 
-employees.stream(): This initiates a stream of Employee entities.
+```employees.stream()```: This initiates a stream of Employee entities.
 
-.map((employee) -> EmployeeMapper.mapToEmployeeDto(employee)): For each Employee entity in the stream, the lambda function provided to the map method converts it into an EmployeeDto object using the EmployeeMapper.
+```.map((employee) -> EmployeeMapper.mapToEmployeeDto(employee))```: For each Employee entity in the stream, the lambda function provided to the map method converts it into an EmployeeDto object using the EmployeeMapper.
 
-.collect(Collectors.toList()): This terminal operation accumulates the processed stream elements (now EmployeeDto objects) into a new list.
+```.collect(Collectors.toList())```: This terminal operation accumulates the processed stream elements (now EmployeeDto objects) into a new list.
 
 3. Return:
 
@@ -460,7 +460,7 @@ Here's how it operates:
 
 1. Find Existing Employee:
 
--The method first tries to fetch an existing Employee entity with the provided employeeId from the database using employeeRepository.findById(employeeId).
+-The method first tries to fetch an existing Employee entity with the provided employeeId from the database using ```employeeRepository.findById(employeeId)```.
 
 -If the employee is not found, a ResourceNotFoundException is thrown indicating the absence of the employee with the given ID.
 
@@ -470,7 +470,7 @@ Here's how it operates:
 
 3.Persist Changes:
 
--The modified Employee entity is saved back to the database with employeeRepository.save(employee), and the updated entity is captured in the updatedEmployeeObj.
+-The modified Employee entity is saved back to the database with ```employeeRepository.save(employee)```, and the updated entity is captured in the updatedEmployeeObj.
 
 4.Convert and Return:
 
@@ -510,14 +510,14 @@ Here's a brief rundown:
 
 1. Retrieve the Employee:
    
-The method attempts to find an Employee entity with the provided employeeId from the database using employeeRepository.findById(employeeId).
+The method attempts to find an Employee entity with the provided employeeId from the database using ```employeeRepository.findById(employeeId)```.
 
 2.Exception Handling:
 
 If the specified employee isn't found, the orElseThrow method triggers, throwing a ResourceNotFoundException with a message indicating that no employee exists with the given ID.
 
 3.Delete the Employee:
-If the employee exists, the method proceeds to delete the employee from the database using employeeRepository.deleteById(employeeId).
+If the employee exists, the method proceeds to delete the employee from the database using ```employeeRepository.deleteById(employeeId)```.
 
 ### EmployeeController:
 ```java
@@ -536,30 +536,34 @@ If the employee exists, the method proceeds to delete the employee from the data
 
 ### For createEmployee method:
 
-In order to test our API, you need to create a new POST request through Postman , write the URL to which the controller method responds (http://localhost:8080/api/employees), select "body" , then "raw" , then JSON and write the following JSON:
+In order to test our API, you need to create a new POST request through Postman , write the URL to which the controller method responds ```(http://localhost:8080/api/employees)```, select "body" , then "raw" , then JSON and write the following JSON:
+```
 {
     "firstName": "name",
     "lastName": "lastName",
     "email":"email@gmail.com"
 }
+```
 You should get the JSON back as a response if the method is correct.
 
 ### For getEmployeeById method:
-Create an GET request and write the localhost URL followed by /id like this: http://localhost:8080/api/employees/1
+Create an GET request and write the localhost URL followed by /id like this: ```http://localhost:8080/api/employees/1```
 You should get back the JSON whose ID is the one mentioned above.
 
 ### For getAllEmployees method:
-Just create a GET request with the localhost URL: http://localhost:8080/api/employees
+Just create a GET request with the localhost URL:``` http://localhost:8080/api/employees```
 You should get a different JSON for every employee in the database.
 
 ### For updateEmployee method:
-Create a PUT request with the URL followed by the /id of whom you want to update: http://localhost:8080/api/employees/1, select "body" , then "raw" , then JSON and write the following JSON:
+Create a PUT request with the URL followed by the /id of whom you want to update:``` http://localhost:8080/api/employees/1```, select "body" , then "raw" , then JSON and write the following JSON:
 following JSON:
+```
 {
     "firstName": "name",
     "lastName": "lastName",
     "email":"email@gmail.com"
 }
+```
 You should get the JSON back with the attributes updated.
 
 ### For deleteEmployee method:
