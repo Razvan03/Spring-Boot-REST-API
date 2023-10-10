@@ -1,7 +1,7 @@
 # Spring-Boot-REST-API
 
 ## Tools and Technologies Used
--Java 21
+-Java 21 /n
 -Spring Boot 3
 -Spring Data JPA (Hibernate 6)
 -MySQL Database and Workbench
