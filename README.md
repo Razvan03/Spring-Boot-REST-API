@@ -20,7 +20,7 @@
 
 [1. Spring Boot Application Three-Layer Architecture](#Spring-Boot-Application-Three-Layer-Architecture)
 
-2. Create and Setup Spring Boot Project in Intellij IDEA
+[2. Create and Setup Spring Boot Project in Intellij IDEA](#Setup-Spring-Boot-Project-in-Intellij-IDEA)
 
 3. Configure MySQL Database in Spring Boot Application
 
@@ -81,3 +81,12 @@ This architecture delineates the structure of a Spring Boot application into thr
 ## Flow:
 
 A user, via Postman, sends a request that first hits the Controller in the Presentation layer. The Controller may use a DTO to send the data to the appropriate Service. The Service processes the data (applying business logic) and interacts with the Repository in the DAO layer, using another DTO if needed. The DAO layer, through the Repository, communicates directly with the database. The result then propagates back up through the layers, and a response is returned to Postman.
+
+
+## Setup Spring Boot Project in Intellij IDEA
+
+Navigate to [https://start.spring.io/] and the properties as in the image below:
+
+![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/Spring.png)
+
+After this, click on generate and open the downloaded folder in Intellij IDEA.
