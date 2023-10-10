@@ -247,7 +247,7 @@ In essence, in a REST API setup, the controller manages the HTTP interactions an
 ## Build Add Employee REST API
 
 In EmployeeService write the add method:
-```java EmployeeDto createEmployee(EmployeeDto employeeDto); ```
+```EmployeeDto createEmployee(EmployeeDto employeeDto); ```
 
 EmployeeServiceImpl:
 ```java
@@ -307,4 +307,4 @@ When a client sends a POST request with a JSON payload to this endpoint:
 ## Build Get Employee REST API
 
 In EmployeeService write the getEmployeeById method:
-```java EmployeeDto getEmployeeById(Long employeeId);```
+```EmployeeDto getEmployeeById(Long employeeId);```
