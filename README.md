@@ -28,17 +28,19 @@
 
 [5. Create EmployeeRepository](#Create-EmployeeRepository)
 
-6. Create EmployeeDto and EmployeeMapper
+[6. Create EmployeeDto and EmployeeMapper](#Create-EmployeeDto-and-EmployeeMapper)
 
-7. Build Add Employee REST API
+[7. Creating REST API Operations](#Creating-REST-API-Operations)
 
-8. Build Get Employee REST API
+[8. Build Add Employee REST API](#Build-Add-Employee-REST-API)
 
-9. Build Get All Employees REST API
+[9. Build Get Employee REST API](#Build-Get-Employee-REST-API)
 
-10. Build Update Employeee REST API
+10. Build Get All Employees REST API
 
-11. Build Delete Employee REST API
+11. Build Update Employeee REST API
+
+12. Build Delete Employee REST API
 
 ## Spring Boot Application Three-Layer Architecture
 
@@ -166,13 +168,143 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 The EmployeeRepository interface extends JpaRepository, targeting the Employee entity with a primary key of type Long. It provides CRUD operations for the Employee entity without requiring explicit method definitions. In a Spring-based application, it facilitates data access to the "employees" table in the database.
 
+## Create EmployeeDto and EmployeeMapper
 
+Create 2 new packages named dto and mapper, with 2 new java classes, named EmployeeDto, respectively EmployeeMapper.
 
+EmployeeDto:
+```java
+package net.javaproject.ems.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class EmployeeDto {
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String email;
+}
+```
+The EmployeeDto class is a Data Transfer Object (DTO) representing employee data. It contains attributes like ID, first name, last name, and email. DTOs like this are typically used to transfer data between different layers of an application, abstracting the internal domain model and optimizing the data payload for specific operations or API responses.
 
+EmployeeMapper:
+```java
+package net.javaproject.ems.mapper;
 
+import net.javaproject.ems.dto.EmployeeDto;
+import net.javaproject.ems.entity.Employee;
 
+public class EmployeeMapper {
 
+    public static EmployeeDto mapToEmployeeDto(Employee employee){
+        return new EmployeeDto(
+          employee.getId(),
+          employee.getFirstName(),
+          employee.getLastName(),
+          employee.getEmail()
+        );
+    }
 
+    public static Employee mapToEmployee(EmployeeDto employeeDto){
+        return new Employee(
+                employeeDto.getId(),
+                employeeDto.getFirstName(),
+                employeeDto.getLastName(),
+                employeeDto.getEmail()
+        );
+    }
+}
 
+```
+
+The EmployeeMapper class provides utility methods to convert between the Employee entity and its corresponding EmployeeDto Data Transfer Object. It's used to facilitate the transition of data between different layers of the application, ensuring proper conversion and encapsulation between the domain model and the data representation used for operations or API interactions.
+
+## Creating REST API Operations
+
+### Creating Service package
+
+The EmployeeService interface defines the methods needed for our business operations. EmployeeServiceImpl provides the concrete implementation of these methods, involving interactions with the database through repositories.
+
+Create a new package named Service and an Interface named EmployeeService in which abstract methods are created.
+
+In the Service package create another package named impl and a class named EmployeeServiceImpl, where the implementation of createEmployee will be overridden.
+
+### Creating Controller package
+
+In order to use the methods from the service package, you will need to create a controller package with an EmployeeController java class.
+
+EmployeeController will contain endpoints(like POST for adding an employee) mapped to specific URLs. When an HTTP request hits one of these URLs, the corresponding method in the controller is invoked. This method then calls the service layer to process the request and returns a response, typically in JSON format, along with a HTTP status code.
+
+In essence, in a REST API setup, the controller manages the HTTP interactions and delegates the business operations to the service layer.
+
+## Build Add Employee REST API
+
+In EmployeeService write the add method:
+```java EmployeeDto createEmployee(EmployeeDto employeeDto); ```
+
+EmployeeServiceImpl:
+```java
+import net.javaproject.ems.mapper.EmployeeMapper;
+import net.javaproject.ems.repository.EmployeeRepository;
+import net.javaproject.ems.service.EmployeeService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@AllArgsConstructor
+public class EmployeeServiceImpl implements EmployeeService {
+    private EmployeeRepository employeeRepository;
+    @Override
+    public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+
+        Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
+        Employee savedEmployee = employeeRepository.save(employee);
+        return EmployeeMapper.mapToEmployeeDto(savedEmployee);
+    }
+}
+```
+
+The createEmployee method in EmployeeServiceImpl takes an EmployeeDto as input, converts it to an Employee entity using the EmployeeMapper, saves the entity to the database through the employeeRepository, and then converts the saved entity back to an EmployeeDto using the mapper, returning the DTO representation of the persisted employee.
+
+EmployeeController:
+
+```java
+@RestController //capable to handle HTTP requests
+@RequestMapping("/api/employees") //orice request la /api/employees o sa fie tratat de acest controller (endpoint) si va returna un raspuns
+@AllArgsConstructor
+public class EmployeeController {
+    private EmployeeService employeeService;
+
+    //Build Add Employee REST API
+    @PostMapping
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto){
+        //@RequestBody primeste un json data de la user(HTTP Request), il converteste intr-un EmployeeDto
+        EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);
+        return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
+    }
+}
+```
+
+The createEmployee method in the EmployeeController class handles HTTP POST requests to the /api/employees endpoint.
+
+When a client sends a POST request with a JSON payload to this endpoint:
+
+1.The @RequestBody annotation automatically converts the JSON payload into an EmployeeDto object.
+
+2.This employeeDto object is then passed to the employeeService.createEmployee method, which contains the business logic for saving the employee.
+
+3.Once the employee is successfully saved, the method returns a response with the saved EmployeeDto object and an HTTP status of CREATED (HTTP 201).
+
+## Build Get Employee REST API
+
+In EmployeeService write the getEmployeeById method:
+```java EmployeeDto getEmployeeById(Long employeeId);```
