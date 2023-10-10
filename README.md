@@ -40,7 +40,7 @@
 
 11.Build Delete Employee REST API
 
-# Spring Boot Application Three-Layer Architecture
+## Spring Boot Application Three-Layer Architecture
 
 ![Alt Text](https://github.com/Razvan03/Spring-Boot-REST-API/blob/main/SpringBoot%20App/ThreeLayers.jpg)
 
