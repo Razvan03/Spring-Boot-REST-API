@@ -46,38 +46,38 @@
 
 This architecture delineates the structure of a Spring Boot application into three primary layers: Presentation, Service, and DAO. External requests from tools like Postman interact with the Presentation layer, which further communicates with the Service layer, eventually reaching the DAO layer for database operations. The layers exchange data using Data Transfer Objects (DTOs) to ensure a clean separation of concerns.
 
-### Layers Explanation:
+## Layers Explanation:
 
-#### 1. Presentation Layer(Controller Layer):
+### 1. Presentation Layer(Controller Layer):
 
-##### Purpose: To receive and respond to external requests, typically HTTP requests, acting as the initial entry point for the application.
+#### Purpose: To receive and respond to external requests, typically HTTP requests, acting as the initial entry point for the application.
 
-##### Contents:
+#### Contents:
 
 -Controllers: They handle incoming requests, validate input, and return appropriate responses, often in the form of JSON or XML.
 
 -DTOs (Data Transfer Objects): These are simple objects that carry data between processes. In this context, DTOs are used to transfer data between the Presentation layer and the Service layer, abstracting the internal domain model.
 
-#### 2. Service Layer:
+### 2. Service Layer:
 
-##### Purpose: To encapsulate the business logic of the application. This layer communicates between the Presentation and DAO layers, ensuring that data is processed, validated, or transformed as needed.
+#### Purpose: To encapsulate the business logic of the application. This layer communicates between the Presentation and DAO layers, ensuring that data is processed, validated, or transformed as needed.
 
-##### Contents:
+#### Contents:
 
 -Services: They contain core business logic and rules of the application. Any operation that needs to be executed, like calculations, validations, or in my case , CRUD Operations Usage implementations, happens here.
 
 -DTOs: While also present in the Presentation layer, DTOs are used in the Service layer to pass data to and from the DAO layer, ensuring that there's a clear boundary and separation of concerns.
 
-#### 3. DAO Layer(Repository Layer):
+### 3. DAO Layer(Repository Layer):
 
-##### Purpose: Direct interaction with the database. This layer is responsible for creating, reading, updating, and deleting records in the database.
+#### Purpose: Direct interaction with the database. This layer is responsible for creating, reading, updating, and deleting records in the database.
 
-##### Contents:
+#### Contents:
 
 -Repositories (DAOs): These are interfaces or abstract classes, typically using frameworks like JPA (Java Persistence API). They provide methods to perform CRUD operations and interact directly with the database.
 
 -Entities: Represented as classes, these are the domain models mapped directly to the database tables. They can have annotations to describe relationships, table names, and other database-related configurations.
 
-### Flow:
+## Flow:
 
 A user, via Postman, sends a request that first hits the Controller in the Presentation layer. The Controller may use a DTO to send the data to the appropriate Service. The Service processes the data (applying business logic) and interacts with the Repository in the DAO layer, using another DTO if needed. The DAO layer, through the Repository, communicates directly with the database. The result then propagates back up through the layers, and a response is returned to Postman.
